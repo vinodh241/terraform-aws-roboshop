@@ -33,11 +33,6 @@ resource "terraform_data" "main" {
   triggers_replace = [
     aws_instance.main.id
   ]
-  
-  provisioner "file" {
-    source      = "bootstrap.sh"
-    destination = "/tmp/${var.component}.sh"
-  }
 
   connection {
     type     = "ssh"
@@ -46,16 +41,22 @@ resource "terraform_data" "main" {
     host     = aws_instance.main.private_ip
   }
 
- provisioner "remote-exec" {
+  provisioner "file" {
+    source      = "bootstrap.sh"
+    destination = "/tmp/${var.component}.sh"
+  }
+
+  provisioner "remote-exec" {
     inline = [
-      "ls -l /tmp/bootstrap.sh",
+      "ls -l /tmp/${var.component}.sh",
       "sleep 5",
-      "sed -i 's/\r$//' /tmp/bootstrap.sh",
-      "chmod +x /tmp/bootstrap.sh",
+      "sed -i 's/\r$//' /tmp/${var.component}.sh",
+      "chmod +x /tmp/${var.component}.sh",
       "sudo sh /tmp/${var.component}.sh ${var.component} ${var.environment}"
     ]
   }
 }
+
 
 resource "aws_ec2_instance_state" "main" {
   instance_id = aws_instance.main.id
