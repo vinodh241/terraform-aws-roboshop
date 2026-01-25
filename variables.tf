@@ -1,22 +1,22 @@
 variable "project" {
-    default = "roboshop"
+  default = "roboshop"
 }
 
 variable "environment" {
-    default = "dev"
+  default = "dev"
 }
 
 variable "zone_id" {
-    default = "Z0745757KP2VOJQE63F"
+  default = "Z0745757KP2VOJQE63F"
 }
 
 variable "zone_name" {
-    default = "vinodh.site"
+  default = "vinodh.site"
 }
 variable "component" {
 
 }
 
 variable "rule_priority" {
-    
+
 }
