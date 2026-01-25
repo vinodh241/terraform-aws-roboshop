@@ -88,6 +88,8 @@ resource "terraform_data" "main_delete" {
   depends_on = [aws_ami_from_instance.main]
 }
 
+###################################################################################################
+
 resource "aws_launch_template" "main" {
   name = "${var.project}-${var.environment}-${var.component}"
 
@@ -97,7 +99,7 @@ resource "aws_launch_template" "main" {
   vpc_security_group_ids               = [local.sg_id]
   update_default_version               = true # each time you update, new version will become default
 
-    
+
   tag_specifications {
     resource_type = "instance"
     # EC2 tags created by ASG
@@ -130,6 +132,8 @@ resource "aws_launch_template" "main" {
   )
 
 }
+
+########################################################################################################################
 
 resource "aws_autoscaling_group" "main" {
   name                      = "${var.project}-${var.environment}-${var.component}"
