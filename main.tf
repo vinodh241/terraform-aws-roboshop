@@ -10,7 +10,7 @@ resource "aws_lb_target_group" "main" {
     matcher = "200-299"
     path = local.health_check_path
     port = local.tg_port
-    timeout = 5
+    timeout = 2
     unhealthy_threshold = 3
   }
 }
@@ -33,17 +33,17 @@ resource "terraform_data" "main" {
   triggers_replace = [
     aws_instance.main.id
   ]
+  
+  provisioner "file" {
+    source      = "bootstrap.sh"
+    destination = "/tmp/${var.component}.sh"
+  }
 
   connection {
     type     = "ssh"
     user     = "ec2-user"
     password = "DevOps321"
     host     = aws_instance.main.private_ip
-  }
-
-  provisioner "file" {
-    source      = "bootstrap.sh"
-    destination = "/tmp/${var.component}.sh"
   }
 
   provisioner "remote-exec" {
@@ -56,7 +56,6 @@ resource "terraform_data" "main" {
     ]
   }
 }
-
 
 resource "aws_ec2_instance_state" "main" {
   instance_id = aws_instance.main.id
